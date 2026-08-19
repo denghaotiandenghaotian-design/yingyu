@@ -41,6 +41,7 @@
     <header class="topbar">
       <button class="menu-btn" id="menuBtn">☰</button>
       <div class="topbar-title" id="topTitle">总览</div>
+      <span class="chip seat-badge" id="seatBadge" style="display:none"></span>
       <div class="topbar-meta" id="topMeta"></div>
     </header>
     <section class="view" id="view"></section>
@@ -53,7 +54,8 @@
 <!-- 打印区域（一键 PDF / 打印时显示，平时隐藏） -->
 <div id="printArea"></div>
 
-<!-- 脚本（纯前端，无后端/无构建步骤） -->
+<!-- 脚本（纯前端，无后端/无构建步骤；seats.js 最先加载以建立座位命名空间） -->
+<script src="assets/js/seats.js"></script>
 <script src="assets/js/store.js"></script>
 <script src="assets/js/engine.js"></script>
 <script src="assets/js/m1.js"></script>
