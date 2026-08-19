@@ -143,10 +143,16 @@
       {ico:"💬", title:"阶梯情景对话", desc:"每轮3-5回合·L1易→L3难由易到难", tags:["阶梯","陪练","由易到难"], v:"m10"}
     ];
 
-    /* ===== 页面最顶部 · 资源赞助（低调折叠，默认收起，点击展开） ===== */
+    /* ===== 页面最顶部 · 资源赞助（蓝色按钮 + 支付动图，点击展开） ===== */
     var html = '<div class="sponsor sponsor-top" id="qrCard">'
       + '<button type="button" class="sponsor-toggle" id="qrToggle" aria-expanded="false">'
-      + '<span class="sp-ico">☕</span> 资源赞助 · 支持作者<span class="sp-arrow">▾</span>'
+      + '<svg class="sp-pay" viewBox="0 0 24 24" aria-hidden="true">'
+      + '<path class="pay-star" d="M12 1.6l1.35 3.05 3.3.5-2.4 2.4.58 3.3L12 9.4l-2.83 1.45.58-3.3-2.4-2.4 3.3-.5z" fill="#fff"/>'
+      + '<circle class="pay-coin" cx="12" cy="15.4" r="6.6" fill="var(--accent)"/>'
+      + '<circle class="pay-ring" cx="12" cy="15.4" r="4.5" fill="none" stroke="#fff" stroke-width="1.1" opacity=".85"/>'
+      + '<text x="12" y="18.6" text-anchor="middle" font-size="7" font-weight="800" fill="#1f1300">¥</text>'
+      + '</svg>'
+      + '<span class="sp-txt">资源赞助 · 支持作者</span><span class="sp-arrow">▾</span>'
       + '</button>'
       + '<div class="sponsor-body" id="qrBody">'
       + '<p class="sponsor-note">由于模型 Token 调用成本较高，为了维持服务稳定运行，现开启自愿赞助通道。如果您觉得本应用对您有帮助，欢迎扫码支持服务器及 Token 费用。金额不限，您的支持是我持续维护的动力！</p>'
