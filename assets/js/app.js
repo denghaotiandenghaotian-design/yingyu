@@ -136,9 +136,11 @@
       var seatObj = null;
       (window.SEATS || []).forEach(function(s){ if(s.id === no) seatObj = s; });
       if(!seatObj){ document.getElementById("gateErr").textContent = "座位号无效（应为 01–100）。"; return; }
-      if(pwd !== seatObj.pwd){ document.getElementById("gateErr").textContent = "口令错误，请核对后重试。"; return; }
+      // 双口令支持：pwds 数组中任一口令均可通过（兼容旧 pwd 单字段）
+      var pwds = seatObj.pwds || (seatObj.pwd ? [seatObj.pwd] : []);
+      if(pwds.indexOf(pwd) === -1){ document.getElementById("gateErr").textContent = "口令错误，请核对后重试。"; return; }
       // 绑定并进入（更新 EL.seat，后续 store 读写自动切换命名空间）
-      window.EL.seat = { id: seatObj.id, pwd: seatObj.pwd, ns: "seat" + seatObj.id + "_", bound: true, isBound: function(){ return true; }, bind: function(){} };
+      window.EL.seat = { id: seatObj.id, pwd: (seatObj.pwds && seatObj.pwds[0]) || seatObj.pwd, ns: "seat" + seatObj.id + "_", bound: true, isBound: function(){ return true; }, bind: function(){} };
       try{ localStorage.setItem("el_seat" + seatObj.id + "_bound", "1"); }catch(e){}
       var badge = document.getElementById("seatBadge");
       if(badge){ badge.textContent = "🪑 座位 " + seatObj.id; badge.style.display = ""; }
