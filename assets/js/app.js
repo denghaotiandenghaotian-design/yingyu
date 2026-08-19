@@ -143,9 +143,21 @@
       {ico:"💬", title:"阶梯情景对话", desc:"每轮3-5回合·L1易→L3难由易到难", tags:["阶梯","陪练","由易到难"], v:"m10"}
     ];
 
+    /* ===== 页面最顶部 · 资源赞助（低调折叠，默认收起，点击展开） ===== */
+    var html = '<div class="sponsor sponsor-top" id="qrCard">'
+      + '<button type="button" class="sponsor-toggle" id="qrToggle" aria-expanded="false">'
+      + '<span class="sp-ico">☕</span> 资源赞助 · 支持作者<span class="sp-arrow">▾</span>'
+      + '</button>'
+      + '<div class="sponsor-body" id="qrBody">'
+      + '<p class="sponsor-note">由于模型 Token 调用成本较高，为了维持服务稳定运行，现开启自愿赞助通道。如果您觉得本应用对您有帮助，欢迎扫码支持服务器及 Token 费用。金额不限，您的支持是我持续维护的动力！</p>'
+      + '<img src="assets/images/qr-pay.png" alt="微信支付二维码" class="sponsor-qr">'
+      + '<div class="sponsor-tip">☕ 扫码赞赏一杯咖啡 · 金额不限，心意最重</div>'
+      + '</div>'
+      + '</div>';
+
     /* ===== 第一部分 · 图示区域（带文字说明） ===== */
     // ① Hero 主视觉：文案 + 学习旅程插画
-    var html = '<div class="hero hero-land">'
+    html += '<div class="hero hero-land">'
       + '<div class="hero-copy">'
       + '<div class="hero-eyebrow"><span class="chip accent">✨ 0 → 1 轻松入门</span><span class="chip">🔒 本地离线</span><span class="chip b">🧩 开箱即用</span></div>'
       + '<h1>成人英语学习辅助系统</h1>'
@@ -190,18 +202,6 @@
       + '<div class="enter-title">准备好了吗？</div>'
       + '<div class="enter-sub">每天 15 分钟，比昨天多会一句</div>'
       + '<button class="btn enter-btn" id="enterBtn"><span class="enter-ico">🚀</span> 进入学习 <span class="enter-arrow">→</span></button>'
-      + '</div>'
-      + '</div>';
-
-    /* ===== 页脚 · 自愿赞助（低调折叠，默认收起，点击展开） ===== */
-    html += '<div class="sponsor" id="qrCard">'
-      + '<button type="button" class="sponsor-toggle" id="qrToggle" aria-expanded="false">'
-      + '<span class="sp-ico">☕</span> 自愿赞助 · 支持作者<span class="sp-arrow">▾</span>'
-      + '</button>'
-      + '<div class="sponsor-body" id="qrBody">'
-      + '<p class="sponsor-note">由于模型 Token 调用成本较高，为了维持服务稳定运行，现开启自愿赞助通道。如果您觉得本应用对您有帮助，欢迎扫码支持服务器及 Token 费用。金额不限，您的支持是我持续维护的动力！</p>'
-      + '<img src="assets/images/qr-pay.png" alt="微信支付二维码" class="sponsor-qr">'
-      + '<div class="sponsor-tip">☕ 扫码赞赏一杯咖啡 · 金额不限，心意最重</div>'
       + '</div>'
       + '</div>';
 
