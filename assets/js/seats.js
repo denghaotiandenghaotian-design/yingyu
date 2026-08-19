@@ -242,8 +242,7 @@ window.SEATS = [
   {
     "id": "34",
     "pwds": [
-      "7LHH",
-      "UUXD"
+      "SAFA"
     ]
   },
   {
