@@ -301,11 +301,18 @@
     return out;
   }
 
+  /* 获取语音引擎（兼容 webkit 旧内核变体，如部分鸿蒙/安卓 WebView） */
+  function ttsObj(){
+    try{ return window.speechSynthesis || window.webkitSpeechSynthesis || null; }
+    catch(e){ return null; }
+  }
+
   /* 选择与 lang 匹配的语音（移动端 voices 异步加载；取不到则仅设 lang 走系统 TTS） */
   function pickVoice(lang){
-    if(!("speechSynthesis" in window)) return null;
+    var s = ttsObj();
+    if(!s) return null;
     try{
-      var vs = window.speechSynthesis.getVoices() || [];
+      var vs = s.getVoices ? (s.getVoices() || []) : [];
       if(!vs.length) return null;
       var l = (lang || "en-US").toLowerCase(), i;
       for(i=0;i<vs.length;i++){ if((vs[i].lang||"").toLowerCase() === l) return vs[i]; }
@@ -317,9 +324,9 @@
 
   /* 首次用户手势唤醒语音引擎（iOS Safari 强制要求：先播一个静音极短段解锁） */
   function ttsUnlock(){
-    if(!("speechSynthesis" in window)) return false;
+    var s = ttsObj();
+    if(!s) return false;
     try{
-      var s = window.speechSynthesis;
       s.cancel();
       var u = new SpeechSynthesisUtterance(" ");
       u.volume = 0; u.rate = 10; u.lang = "en-US";
@@ -334,7 +341,7 @@
      朗读一旦开始（onstart）绝不中途打断，避免吞音/掐段 */
   function playNext(){
     if(!_ttsQueue.length){ _ttsPlaying = false; return; }
-    var s = window.speechSynthesis;
+    var s = ttsObj();
     if(!s){ _ttsQueue = []; _ttsPlaying = false; return; }
     var u = _ttsQueue.shift();
     _ttsPlaying = true;
@@ -364,15 +371,21 @@
   function speak(text, lang){
     lang = lang || "en-US";
     try{
-      if(!("speechSynthesis" in window)){
+      var s = ttsObj();
+      if(!s){
         if(!_ttsWarned && EL.engine && EL.engine.toast){
           _ttsWarned = true;
-          var wechat = /MicroMessenger/i.test((navigator.userAgent || ""));
-          EL.engine.toast(wechat ? "微信内浏览器不支持朗读，请用系统浏览器打开" : "当前设备/浏览器不支持语音朗读", "warn");
+          var ua = navigator.userAgent || "";
+          var wechat = /MicroMessenger/i.test(ua);
+          var huawei = /Huawei|Honor|HarmonyOS/i.test(ua) || /Mate\s?\d|Pura|Nova/i.test(ua);
+          EL.engine.toast(wechat
+            ? "微信内浏览器不支持朗读，请用系统浏览器打开"
+            : (huawei
+                ? "当前浏览器不支持语音朗读；华为手机请安装 Chrome 或 Edge 后打开本链接"
+                : "当前设备/浏览器不支持语音朗读，请改用 Chrome / Safari / Edge 打开"), "warn");
         }
         return false;
       }
-      var s = window.speechSynthesis;
       s.cancel();            // 打断上次播报
       _ttsQueue = [];
       if(!_ttsReady) ttsUnlock();
@@ -402,11 +415,11 @@
 
   /* 全局手势解锁：用户在页面任意位置点击一次即激活语音引擎，
      之后自动播报（开场白/对话回复等 setTimeout 触发的 speak）也能正常出声 */
-  if(typeof document !== "undefined" && "speechSynthesis" in window){
+  if(typeof document !== "undefined" && ttsObj()){
     document.addEventListener("click", function once(){
       try{
-        var s = window.speechSynthesis;
-        if(!(s.speaking || s.pending)){
+        var s = ttsObj();
+        if(s && !(s.speaking || s.pending)){
           s.cancel();
           var u = new SpeechSynthesisUtterance(" ");
           u.volume = 0; u.rate = 10;
