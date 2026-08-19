@@ -183,7 +183,7 @@
       + '<li><b>小技巧</b>：右上角可切换浅色 / 深色主题；「清空数据」可随时恢复示例内容。</li>'
       + '</ul></div>';
 
-    /* ===== 页面最底部 · 进入按钮 + 支持作者 ===== */
+    /* ===== 页面最底部 · 进入按钮 ===== */
     html += '<div class="home-enter">'
       + '<div class="enter-card">'
       + '<div class="enter-kicker">READY?</div>'
@@ -191,13 +191,18 @@
       + '<div class="enter-sub">每天 15 分钟，比昨天多会一句</div>'
       + '<button class="btn enter-btn" id="enterBtn"><span class="enter-ico">🚀</span> 进入学习 <span class="enter-arrow">→</span></button>'
       + '</div>'
-      + '<div class="card hero-qr hero-qr-mini" id="qrCard">'
-      + '<div class="hero-qr-head"><span class="chip accent">☕ 支持作者</span></div>'
-      + '<div class="hero-qr-body">'
-      + '<img src="assets/images/qr-pay.png" alt="微信支付二维码" class="hero-qr-img">'
-      + '<div class="hero-qr-note"><b>觉得好用？扫码赞赏一杯咖啡</b>'
-      + '<br><span class="muted small">您的支持会持续带来更多学习模块与内容更新。</span></div>'
-      + '</div></div>'
+      + '</div>';
+
+    /* ===== 页脚 · 自愿赞助（低调折叠，默认收起，点击展开） ===== */
+    html += '<div class="sponsor" id="qrCard">'
+      + '<button type="button" class="sponsor-toggle" id="qrToggle" aria-expanded="false">'
+      + '<span class="sp-ico">☕</span> 自愿赞助 · 支持作者<span class="sp-arrow">▾</span>'
+      + '</button>'
+      + '<div class="sponsor-body" id="qrBody">'
+      + '<p class="sponsor-note">由于模型 Token 调用成本较高，为了维持服务稳定运行，现开启自愿赞助通道。如果您觉得本应用对您有帮助，欢迎扫码支持服务器及 Token 费用。金额不限，您的支持是我持续维护的动力！</p>'
+      + '<img src="assets/images/qr-pay.png" alt="微信支付二维码" class="sponsor-qr">'
+      + '<div class="sponsor-tip">☕ 扫码赞赏一杯咖啡 · 金额不限，心意最重</div>'
+      + '</div>'
       + '</div>';
 
     container.innerHTML = html;
@@ -209,6 +214,13 @@
     if(enterBtn) enterBtn.addEventListener("click", function(){ EL.app.go("m1"); });
     EL.engine.$all(".modcard", container).forEach(function(b){
       b.addEventListener("click", function(){ EL.app.go(b.getAttribute("data-go")); });
+    });
+    // 赞助区：点击展开 / 收起（默认收起，低调不突兀）
+    var qrToggle = container.querySelector("#qrToggle");
+    if(qrToggle) qrToggle.addEventListener("click", function(){
+      var open = this.getAttribute("aria-expanded") === "true";
+      this.setAttribute("aria-expanded", String(!open));
+      container.querySelector("#qrCard").classList.toggle("open", !open);
     });
   }
 })();
