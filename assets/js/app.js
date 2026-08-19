@@ -152,7 +152,7 @@
       + '<circle class="pay-ring" cx="12" cy="15.4" r="4.5" fill="none" stroke="#fff" stroke-width="1.1" opacity=".85"/>'
       + '<text x="12" y="18.6" text-anchor="middle" font-size="7" font-weight="800" fill="#1f1300">¥</text>'
       + '</svg>'
-      + '<span class="sp-txt">资源赞助 · 支持作者</span><span class="sp-arrow">▾</span>'
+      + '<span class="sp-txt">资源赞助 · 点击支持作者</span><span class="sp-arrow">▾</span>'
       + '</button>'
       + '<div class="sponsor-body" id="qrBody">'
       + '<p class="sponsor-note">由于模型 Token 调用成本较高，为了维持服务稳定运行，现开启自愿赞助通道。如果您觉得本应用对您有帮助，欢迎扫码支持服务器及 Token 费用。金额不限，您的支持是我持续维护的动力！</p>'
