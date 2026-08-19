@@ -12,14 +12,15 @@
   };
 
   // 练习模式：strict=严格闯关（L2/L3 难回合前须先过语法 mini-check）；free=自由陪练（跳过语法关）
+  // 座位模式：经 EL.store 读写，自动带座位命名空间，座位间互不影响
   var MODE_KEY = "dlg_mode";
-  var mode = (function(){ try{ return window.localStorage.getItem(MODE_KEY) || "strict"; }catch(e){ return "strict"; } })();
-  function setMode(m){ mode = m; try{ window.localStorage.setItem(MODE_KEY, m); }catch(e){} }
+  var mode = EL.store.get(MODE_KEY, "strict");
+  function setMode(m){ mode = m; EL.store.set(MODE_KEY, m); }
 
   // 进入即随机：开启后，每次进入任意情景都先在该情景内部自动洗牌一次（仍仅限本情景）
   var AUTO_KEY = "dlg_autoshuffle";
-  var autoShuffle = (function(){ try{ return window.localStorage.getItem(AUTO_KEY)==="1"; }catch(e){ return false; } })();
-  function setAuto(b){ autoShuffle = b; try{ window.localStorage.setItem(AUTO_KEY, b?"1":"0"); }catch(e){} }
+  var autoShuffle = EL.store.get(AUTO_KEY) === "1";
+  function setAuto(b){ autoShuffle = b; EL.store.set(AUTO_KEY, b ? "1" : "0"); }
 
   function render(container){
     var state = { name:null, idx:0, revealed:[], mine:[], passed:[], order:null };
