@@ -282,17 +282,122 @@
 
   /* =================== 新增：发音(TTS) / 每日一练 / 自然拼读 / 零基础资料库 =================== */
 
-  /* ---- 发音：浏览器内置 TTS（无音频文件，纯前端；不支持时静默降级） ---- */
+  /* ---- 发音：浏览器内置 TTS（移动端兼容：手势解锁 / 长文本分段 / 语音匹配 / 防挂起） ---- */
+  var _ttsReady = false, _ttsQueue = [], _ttsPlaying = false, _ttsWarned = false;
+
+  /* 长文本切分：iOS 单次 utterance 有长度/时长限制，按标点分段（每段 ≤180 字符） */
+  function splitTTS(txt){
+    txt = String(txt || "").replace(/\s+/g, " ").trim();
+    if(!txt) return [];
+    var parts = [], m, re = /[^.!?。！？；;，,：:]+[.!?。！？；;，,：:]?/g;
+    while((m = re.exec(txt)) !== null){ var seg = m[0].trim(); if(seg) parts.push(seg); }
+    if(!parts.length) parts = [txt];
+    var out = [], cur = "";
+    parts.forEach(function(p){
+      if(cur && (cur + " " + p).length <= 180){ cur += " " + p; }
+      else { if(cur) out.push(cur); cur = p; }
+    });
+    if(cur) out.push(cur);
+    return out;
+  }
+
+  /* 选择与 lang 匹配的语音（移动端 voices 异步加载；取不到则仅设 lang 走系统 TTS） */
+  function pickVoice(lang){
+    if(!("speechSynthesis" in window)) return null;
+    try{
+      var vs = window.speechSynthesis.getVoices() || [];
+      if(!vs.length) return null;
+      var l = (lang || "en-US").toLowerCase(), i;
+      for(i=0;i<vs.length;i++){ if((vs[i].lang||"").toLowerCase() === l) return vs[i]; }
+      var pre = l.split("-")[0];
+      for(i=0;i<vs.length;i++){ if((vs[i].lang||"").toLowerCase().indexOf(pre) === 0) return vs[i]; }
+      return null;
+    }catch(e){ return null; }
+  }
+
+  /* 首次用户手势唤醒语音引擎（iOS Safari 强制要求：先播一个静音极短段解锁） */
+  function ttsUnlock(){
+    if(!("speechSynthesis" in window)) return false;
+    try{
+      var s = window.speechSynthesis;
+      s.cancel();
+      var u = new SpeechSynthesisUtterance(" ");
+      u.volume = 0; u.rate = 10; u.lang = "en-US";
+      s.speak(u);
+      _ttsReady = true;
+      return true;
+    }catch(e){ return false; }
+  }
+
+  /* 逐段播放：onend 续播下一段；resume 防暂停态；watchdog 防 iOS 引擎挂起 */
+  function playNext(){
+    if(!_ttsQueue.length){ _ttsPlaying = false; return; }
+    var s = window.speechSynthesis;
+    if(!s){ _ttsQueue = []; _ttsPlaying = false; return; }
+    var u = _ttsQueue.shift();
+    _ttsPlaying = true;
+    var done = false, t = null;
+    function fin(){
+      if(done) return; done = true;
+      if(t) clearTimeout(t);
+      setTimeout(playNext, 60); // 段间留白，iOS 引擎需要喘息
+    }
+    u.onend = fin;
+    u.onerror = fin;
+    try{
+      if(s.paused) s.resume();
+      s.speak(u);
+    }catch(e){ fin(); return; }
+    t = setTimeout(function(){ // 2.8s 无事件 → 强制取消并推进
+      if(done) return;
+      try{ s.cancel(); }catch(e){}
+      fin();
+    }, 2800);
+  }
+
   function speak(text, lang){
     lang = lang || "en-US";
     try{
-      if(!("speechSynthesis" in window)) return false;
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(String(text||""));
-      u.lang = lang; u.rate = 0.95; u.pitch = 1;
-      window.speechSynthesis.speak(u);
+      if(!("speechSynthesis" in window)){
+        if(!_ttsWarned && EL.engine && EL.engine.toast){
+          _ttsWarned = true;
+          var wechat = /MicroMessenger/i.test((navigator.userAgent || ""));
+          EL.engine.toast(wechat ? "微信内浏览器不支持朗读，请用系统浏览器打开" : "当前设备/浏览器不支持语音朗读", "warn");
+        }
+        return false;
+      }
+      var s = window.speechSynthesis;
+      s.cancel();            // 打断上次播报
+      _ttsQueue = [];
+      if(!_ttsReady) ttsUnlock();
+      splitTTS(text).forEach(function(ch){
+        var u = new SpeechSynthesisUtterance(ch);
+        u.lang = lang; u.rate = 0.95; u.pitch = 1;
+        var v = pickVoice(lang);
+        if(v) u.voice = v;
+        _ttsQueue.push(u);
+      });
+      playNext();
       return true;
     }catch(e){ return false; }
+  }
+
+  /* 全局手势解锁：用户在页面任意位置点击一次即激活语音引擎，
+     之后自动播报（开场白/对话回复等 setTimeout 触发的 speak）也能正常出声 */
+  if(typeof document !== "undefined" && "speechSynthesis" in window){
+    document.addEventListener("click", function once(){
+      try{
+        var s = window.speechSynthesis;
+        if(!(s.speaking || s.pending)){
+          s.cancel();
+          var u = new SpeechSynthesisUtterance(" ");
+          u.volume = 0; u.rate = 10;
+          s.speak(u);
+        }
+        _ttsReady = true;
+      }catch(e){}
+      document.removeEventListener("click", once);
+    }, { capture: true });
   }
   function todayKey(d){
     d = d || new Date();
