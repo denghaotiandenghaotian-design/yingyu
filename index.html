@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>成人英语学习辅助系统</title>
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+<div id="app">
+  <!-- 侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">EN</div>
+      <div class="brand-text">
+        <div class="brand-title">成人英语学习辅助系统</div>
+        <div class="brand-sub">0→1 轻松入门 · 本地离线</div>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <button class="nav-item active" data-view="home"><span class="nav-ico">🏠</span>总览</button>
+      <button class="nav-item" data-view="m1"><span class="nav-ico">🌟</span>每日一练</button>
+      <button class="nav-item" data-view="m2"><span class="nav-ico">🗓️</span>复习计划</button>
+      <button class="nav-item" data-view="m3"><span class="nav-ico">🔤</span>自然拼读</button>
+      <button class="nav-item" data-view="m4"><span class="nav-ico">📚</span>背诵打卡材料库</button>
+      <button class="nav-item" data-view="m5"><span class="nav-ico">🎤</span>口语练习</button>
+      <button class="nav-item" data-view="m6"><span class="nav-ico">🎧</span>听力训练</button>
+      <button class="nav-item" data-view="m7"><span class="nav-ico">💬</span>900句玩转英语</button>
+      <button class="nav-item" data-view="m8"><span class="nav-ico">📒</span>单词与句子总库</button>
+      <button class="nav-item" data-view="m9"><span class="nav-ico">🎓</span>专业术语库</button>
+      <button class="nav-item" data-view="m10"><span class="nav-ico">💬</span>阶梯情景对话</button>
+    </nav>
+    <div class="sidebar-foot">
+      <button class="ghost-btn" id="themeToggle">🌓 切换主题</button>
+      <button class="ghost-btn danger" id="resetAll">♻️ 清空数据</button>
+    </div>
+  </aside>
+
+  <!-- 主区域 -->
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="topbar-title" id="topTitle">总览</div>
+      <div class="topbar-meta" id="topMeta"></div>
+    </header>
+    <section class="view" id="view"></section>
+  </main>
+</div>
+
+<!-- 提示气泡容器 -->
+<div id="toastWrap"></div>
+
+<!-- 打印区域（一键 PDF / 打印时显示，平时隐藏） -->
+<div id="printArea"></div>
+
+<!-- 脚本（纯前端，无后端/无构建步骤） -->
+<script src="assets/js/store.js"></script>
+<script src="assets/js/engine.js"></script>
+<script src="assets/js/m1.js"></script>
+<script src="assets/js/m2.js"></script>
+<script src="assets/js/m3.js"></script>
+<script src="assets/js/m4.js"></script>
+<script src="assets/js/m5.js"></script>
+<script src="assets/js/m6.js"></script>
+<script src="assets/js/m7.js"></script>
+<script src="assets/js/m8.js"></script>
+<script src="assets/js/m9.js"></script>
+<script src="assets/js/m10.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
