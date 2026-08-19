@@ -1,21 +1,30 @@
-/* ===== store.js · 数据层（localStorage 持久化，纯前端无后端） ===== */
+/* ===== store.js · 数据层（localStorage 持久化，纯前端无后端） =====
+   座位模式：所有键自动加座位命名空间前缀（EL.seat.ns），座位间数据完全隔离。 */
 (function(){
   window.EL = window.EL || {};
   var NS = "el_"; // 本地存储键前缀
 
+  /* 当前命名空间：seat{id}_el_（座位模式）；无座位时保持 el_ */
+  function ns(){
+    return (window.EL && EL.seat && EL.seat.ns) ? (EL.seat.ns + NS) : NS;
+  }
+
   function get(key, fallback){
     try{
-      var raw = localStorage.getItem(NS + key);
+      var raw = localStorage.getItem(ns() + key);
       if(raw === null || raw === undefined) return (fallback !== undefined ? fallback : null);
       return JSON.parse(raw);
     }catch(e){ return (fallback !== undefined ? fallback : null); }
   }
   function set(key, val){
-    try{ localStorage.setItem(NS + key, JSON.stringify(val)); return true; }
+    try{ localStorage.setItem(ns() + key, JSON.stringify(val)); return true; }
     catch(e){ console.error("存储失败", e); return false; }
   }
-  function remove(key){ localStorage.removeItem(NS + key); }
-  function clearAll(){ Object.keys(localStorage).forEach(function(k){ if(k.indexOf(NS)===0) localStorage.removeItem(k); }); }
+  function remove(key){ localStorage.removeItem(ns() + key); }
+  function clearAll(){
+    var p = ns();
+    Object.keys(localStorage).forEach(function(k){ if(k.indexOf(p)===0) localStorage.removeItem(k); });
+  }
 
   /* 通用集合：对某个 key 下的数组做增删改查 */
   function collection(key){
