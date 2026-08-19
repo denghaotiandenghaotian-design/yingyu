@@ -5,207 +5,208 @@
  *   换设备/清缓存/隐身模式需重新输入。口令重置：把新口令告诉老师，更新后重新部署（链接不变）。
  * - 注意：静态方案中口令明文存在于本文件，任何人查看源码可见，属软性防护，
  *   无法做到真正的「一人一号」。请告知学生勿转发链接与口令。
+ * - 前 50 座口令保持与初版一致（历史口令已恢复）；51-100 为新生成口令。
  * ========================================================================= */
 window.SEATS = [
   {
     "id": "01",
-    "pwd": "HAEC"
+    "pwd": "K3DJ"
   },
   {
     "id": "02",
-    "pwd": "FXEE"
+    "pwd": "PRDV"
   },
   {
     "id": "03",
-    "pwd": "VLSV"
+    "pwd": "JHTR"
   },
   {
     "id": "04",
-    "pwd": "63KZ"
+    "pwd": "8PEQ"
   },
   {
     "id": "05",
-    "pwd": "ZCUD"
+    "pwd": "HXXL"
   },
   {
     "id": "06",
-    "pwd": "22MS"
+    "pwd": "KMD4"
   },
   {
     "id": "07",
-    "pwd": "YELJ"
+    "pwd": "ELN7"
   },
   {
     "id": "08",
-    "pwd": "YC5W"
+    "pwd": "CXBS"
   },
   {
     "id": "09",
-    "pwd": "EZV2"
+    "pwd": "BWGQ"
   },
   {
     "id": "10",
-    "pwd": "UT8G"
+    "pwd": "BLS9"
   },
   {
     "id": "11",
-    "pwd": "FJV8"
+    "pwd": "WJTQ"
   },
   {
     "id": "12",
-    "pwd": "CSL7"
+    "pwd": "75RW"
   },
   {
     "id": "13",
-    "pwd": "B6CD"
+    "pwd": "NSNE"
   },
   {
     "id": "14",
-    "pwd": "4B53"
+    "pwd": "Q4HC"
   },
   {
     "id": "15",
-    "pwd": "LQNC"
+    "pwd": "5GZZ"
   },
   {
     "id": "16",
-    "pwd": "6HTC"
+    "pwd": "5FSC"
   },
   {
     "id": "17",
-    "pwd": "JGHC"
+    "pwd": "7C59"
   },
   {
     "id": "18",
-    "pwd": "KBDX"
+    "pwd": "38HL"
   },
   {
     "id": "19",
-    "pwd": "246Z"
+    "pwd": "55JF"
   },
   {
     "id": "20",
-    "pwd": "7THM"
+    "pwd": "G7R2"
   },
   {
     "id": "21",
-    "pwd": "65HX"
+    "pwd": "TYNJ"
   },
   {
     "id": "22",
-    "pwd": "THJ3"
+    "pwd": "CV5C"
   },
   {
     "id": "23",
-    "pwd": "JC57"
+    "pwd": "NF9L"
   },
   {
     "id": "24",
-    "pwd": "GCDE"
+    "pwd": "V84Y"
   },
   {
     "id": "25",
-    "pwd": "RSQX"
+    "pwd": "HLH6"
   },
   {
     "id": "26",
-    "pwd": "M8H7"
+    "pwd": "4BW7"
   },
   {
     "id": "27",
-    "pwd": "6N6H"
+    "pwd": "AKTR"
   },
   {
     "id": "28",
-    "pwd": "HZYX"
+    "pwd": "CNFT"
   },
   {
     "id": "29",
-    "pwd": "VRR9"
+    "pwd": "9KXW"
   },
   {
     "id": "30",
-    "pwd": "9AF8"
+    "pwd": "FZNG"
   },
   {
     "id": "31",
-    "pwd": "5M54"
+    "pwd": "48KN"
   },
   {
     "id": "32",
-    "pwd": "3Y3R"
+    "pwd": "Q5CM"
   },
   {
     "id": "33",
-    "pwd": "XFCD"
+    "pwd": "UZH7"
   },
   {
     "id": "34",
-    "pwd": "UUXD"
+    "pwd": "7LHH"
   },
   {
     "id": "35",
-    "pwd": "XE7M"
+    "pwd": "V4J5"
   },
   {
     "id": "36",
-    "pwd": "8GZS"
+    "pwd": "JY65"
   },
   {
     "id": "37",
-    "pwd": "FS65"
+    "pwd": "3YSL"
   },
   {
     "id": "38",
-    "pwd": "7BLQ"
+    "pwd": "F6UR"
   },
   {
     "id": "39",
-    "pwd": "BGFP"
+    "pwd": "5R7N"
   },
   {
     "id": "40",
-    "pwd": "9UQL"
+    "pwd": "RJ95"
   },
   {
     "id": "41",
-    "pwd": "VC9N"
+    "pwd": "S5QQ"
   },
   {
     "id": "42",
-    "pwd": "HQF6"
+    "pwd": "AANR"
   },
   {
     "id": "43",
-    "pwd": "XRBZ"
+    "pwd": "MTBU"
   },
   {
     "id": "44",
-    "pwd": "UVGP"
+    "pwd": "ESC2"
   },
   {
     "id": "45",
-    "pwd": "NLNS"
+    "pwd": "FSWB"
   },
   {
     "id": "46",
-    "pwd": "7E4U"
+    "pwd": "9P5Z"
   },
   {
     "id": "47",
-    "pwd": "DWEP"
+    "pwd": "V2YN"
   },
   {
     "id": "48",
-    "pwd": "35QU"
+    "pwd": "LTPN"
   },
   {
     "id": "49",
-    "pwd": "PESB"
+    "pwd": "GQ7P"
   },
   {
     "id": "50",
-    "pwd": "58RU"
+    "pwd": "FB7U"
   },
   {
     "id": "51",
