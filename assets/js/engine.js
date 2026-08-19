@@ -283,7 +283,7 @@
   /* =================== 新增：发音(TTS) / 每日一练 / 自然拼读 / 零基础资料库 =================== */
 
   /* ---- 发音：浏览器内置 TTS（移动端兼容：手势解锁 / 长文本分段 / 语音匹配 / 防挂起） ---- */
-  var _ttsReady = false, _ttsQueue = [], _ttsPlaying = false, _ttsWarned = false;
+  var _ttsReady = false, _ttsQueue = [], _ttsPlaying = false, _ttsWarned = false, _ttsNoEnWarned = false;
 
   /* 长文本切分：iOS 单次 utterance 有长度/时长限制，按标点分段（每段 ≤180 字符） */
   function splitTTS(txt){
@@ -329,30 +329,36 @@
     }catch(e){ return false; }
   }
 
-  /* 逐段播放：onend 续播下一段；resume 防暂停态；watchdog 防 iOS 引擎挂起 */
+  /* 逐段播放：onend 续播下一段；resume 防暂停态；
+     防挂起看门狗仅兜底"引擎完全无响应"（3s 内既无 onstart 也无 onend 才判挂起），
+     朗读一旦开始（onstart）绝不中途打断，避免吞音/掐段 */
   function playNext(){
     if(!_ttsQueue.length){ _ttsPlaying = false; return; }
     var s = window.speechSynthesis;
     if(!s){ _ttsQueue = []; _ttsPlaying = false; return; }
     var u = _ttsQueue.shift();
     _ttsPlaying = true;
-    var done = false, t = null;
+    var started = false, done = false, t = null;
     function fin(){
       if(done) return; done = true;
       if(t) clearTimeout(t);
       setTimeout(playNext, 60); // 段间留白，iOS 引擎需要喘息
     }
+    u.onstart = function(){ started = true; };
     u.onend = fin;
     u.onerror = fin;
     try{
       if(s.paused) s.resume();
       s.speak(u);
     }catch(e){ fin(); return; }
-    t = setTimeout(function(){ // 2.8s 无事件 → 强制取消并推进
+    t = setTimeout(function(){
       if(done) return;
-      try{ s.cancel(); }catch(e){}
-      fin();
-    }, 2800);
+      if(!started){ // 引擎完全无响应（连 onstart 都没触发）才兜底
+        try{ s.cancel(); }catch(e){}
+        fin();
+      }
+      // 已开始朗读：交给自然结束，绝不打断
+    }, 3000);
   }
 
   function speak(text, lang){
@@ -370,13 +376,25 @@
       s.cancel();            // 打断上次播报
       _ttsQueue = [];
       if(!_ttsReady) ttsUnlock();
+      var _noVoice = false;
       splitTTS(text).forEach(function(ch){
         var u = new SpeechSynthesisUtterance(ch);
         u.lang = lang; u.rate = 0.95; u.pitch = 1;
         var v = pickVoice(lang);
-        if(v) u.voice = v;
+        if(v) u.voice = v; else _noVoice = true;
         _ttsQueue.push(u);
       });
+      // 目标英文但系统无任何英文语音（安卓常见：中文引擎读英文，腔调怪/吞音）→ 提示一次
+      if(_noVoice && !_ttsNoEnWarned && EL.engine && EL.engine.toast && /^en/i.test(lang)){
+        try{
+          var vs = s.getVoices ? (s.getVoices() || []) : [];
+          var hasEn = vs.some(function(x){ return (x.lang || "").toLowerCase().indexOf("en") === 0; });
+          if(vs.length && !hasEn){
+            _ttsNoEnWarned = true;
+            EL.engine.toast("系统缺少英文语音，发音可能不标准；可在手机系统设置中安装英文语音包（如 Google TTS / 讯飞）", "warn");
+          }
+        }catch(e){}
+      }
       playNext();
       return true;
     }catch(e){ return false; }
