@@ -5,16 +5,29 @@
   document.addEventListener("DOMContentLoaded", init);
 
   function init(){
-    // 注入种子数据（首次）
-    if(EL.seed) EL.seed();
-
-    // 主题
-    var savedTheme = localStorage.getItem("el_theme");
+    // 主题（座位模式：经 EL.store 读写，按座位隔离）
+    var savedTheme = EL.store.get("theme");
     if(savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+
+    // ===== 座位门禁：未绑定（或无座位参数）先过门禁 =====
+    if(!EL.seat.bound){
+      renderGate();
+      return;
+    }
+    bootApp();
+  }
+
+  function bootApp(){
+    // 注入种子数据（首次，按座位命名空间）
+    if(EL.seed) EL.seed();
 
     var view = document.getElementById("view");
     var topTitle = document.getElementById("topTitle");
     var topMeta = document.getElementById("topMeta");
+
+    // 座位徽标
+    var badge = document.getElementById("seatBadge");
+    if(badge && EL.seat.id){ badge.textContent = "🪑 座位 " + EL.seat.id; badge.style.display = ""; }
 
     var MODULES = {
       home:{title:"总览", render:renderHome},
@@ -63,7 +76,7 @@
       var next = cur==="dark"?"light":"dark";
       if(next==="light") document.documentElement.removeAttribute("data-theme");
       else document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("el_theme", next);
+      EL.store.set("theme", next);
     });
     document.getElementById("resetAll").addEventListener("click", function(){
       if(confirm("确认清空全部本地学习数据？此操作不可恢复。")){
@@ -76,6 +89,75 @@
 
     EL.app = { go:go, current:"home", updateMeta:updateMeta };
     go("home");
+  }
+
+  /* ===== 座位门禁：未绑定 / 无座位参数 / 无效座位 ===== */
+  function renderGate(){
+    var view = document.getElementById("view");
+    var topTitle = document.getElementById("topTitle");
+    var topMeta = document.getElementById("topMeta");
+    topTitle.textContent = "座位入口";
+    topMeta.textContent = "座位模式已开启 · 50 个座位";
+
+    var raw = "";
+    try{ raw = (new URLSearchParams(location.search).get("seat") || "").trim().toUpperCase(); }catch(e){}
+    var invalid = raw !== "" && !EL.seat.id; // URL 有座位号但不在配置中
+    var id = EL.seat.id;
+    var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+
+    var html = '<div class="gate-wrap"><div class="card gate-card">'
+      + '<div class="gate-logo">🪑</div>'
+      + '<div class="gate-head">' + (invalid ? "⚠️ 座位无效" : (id ? "座位 " + id : "座位入口")) + '</div>'
+      + '<div class="gate-sub">' + (invalid
+          ? '链接中的座位号「' + esc(raw) + '」不存在，本系统仅有 01–50 号座位。'
+          : (id
+              ? '首次打开本座位，输入口令完成设备绑定。<br>之后本机免输口令；口令是真正的钥匙，请勿转发。'
+              : '请使用老师发放的专属链接，<br>或手动输入座位号（01–50）与口令。'))
+      + '</div>'
+      + '<div class="gate-form">'
+      + (id ? '' : '<div class="gate-field"><label>座位号</label><input type="text" id="gateNo" placeholder="如 03" maxlength="2" autocomplete="off"></div>')
+      + '<div class="gate-field"><label>座位口令</label><input type="password" id="gatePwd" placeholder="请输入本座位口令" autocomplete="off"></div>'
+      + '<div class="gate-actions">'
+      + '<button class="btn" id="gateEnter">🔓 进入系统</button>'
+      + (id ? '<button class="btn ghost" id="gateReset">↺ 换座位</button>' : '')
+      + '</div>'
+      + '<div class="gate-err" id="gateErr"></div>'
+      + '</div>'
+      + '<details class="gate-help"><summary>座位模式说明（点击展开）</summary>'
+      + '<div class="gate-help-body">' + (window.SEAT_HELP || "").split("\n").map(function(l){ return '<div class="gh-line">' + esc(l) + '</div>'; }).join("") + '</div>'
+      + '</details>'
+      + '</div></div>';
+
+    view.innerHTML = html;
+
+    function doEnter(){
+      var no = id || (document.getElementById("gateNo") ? document.getElementById("gateNo").value.trim().toUpperCase() : "");
+      var pwd = document.getElementById("gatePwd").value.trim().toUpperCase();
+      var seatObj = null;
+      (window.SEATS || []).forEach(function(s){ if(s.id === no) seatObj = s; });
+      if(!seatObj){ document.getElementById("gateErr").textContent = "座位号无效（应为 01–50）。"; return; }
+      if(pwd !== seatObj.pwd){ document.getElementById("gateErr").textContent = "口令错误，请核对后重试。"; return; }
+      // 绑定并进入（更新 EL.seat，后续 store 读写自动切换命名空间）
+      window.EL.seat = { id: seatObj.id, pwd: seatObj.pwd, ns: "seat" + seatObj.id + "_", bound: true, isBound: function(){ return true; }, bind: function(){} };
+      try{ localStorage.setItem("el_seat" + seatObj.id + "_bound", "1"); }catch(e){}
+      var badge = document.getElementById("seatBadge");
+      if(badge){ badge.textContent = "🪑 座位 " + seatObj.id; badge.style.display = ""; }
+      if(EL.engine && EL.engine.toast) EL.engine.toast("座位 " + seatObj.id + " 绑定成功，欢迎回来！","ok");
+      bootApp();
+    }
+
+    document.getElementById("gateEnter").addEventListener("click", doEnter);
+    var gp = document.getElementById("gatePwd");
+    gp.addEventListener("keydown", function(e){ if(e.key === "Enter") doEnter(); });
+    if(!id){
+      var gn = document.getElementById("gateNo");
+      gn.addEventListener("keydown", function(e){ if(e.key === "Enter") doEnter(); });
+      setTimeout(function(){ gn.focus(); }, 30);
+    } else {
+      setTimeout(function(){ gp.focus(); }, 30);
+    }
+    var gr = document.getElementById("gateReset");
+    if(gr) gr.addEventListener("click", function(){ location.search = ""; });
   }
 
   /* 首页插画（SVG，颜色经 CSS 类取变量以自动适配浅/深主题） */
