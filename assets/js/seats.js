@@ -1,412 +1,662 @@
 /* =========================================================================
  * 座位系统配置（座位模式 · 成人英语学习辅助系统）
  * - 100 个座位，每人一个专属链接（?seat=XX），数据按座位命名空间完全隔离。
- * - pwd 为本座位口令（静态方案下的「软钥匙」）：首开输口令完成本机绑定，之后免输；
- *   换设备/清缓存/隐身模式需重新输入。口令重置：把新口令告诉老师，更新后重新部署（链接不变）。
+ * - pwds 为本座位口令列表（任一口令均可通过门禁）：
+ *   前 50 座为【新旧双口令】——新口令与历史口令同时有效（学生旧口令长期可用）；
+ *   51-100 座为单口令。口令重置：把新口令告诉老师，更新后重新部署（链接不变）。
  * - 注意：静态方案中口令明文存在于本文件，任何人查看源码可见，属软性防护，
  *   无法做到真正的「一人一号」。请告知学生勿转发链接与口令。
- * - 前 50 座口令保持与初版一致（历史口令已恢复）；51-100 为新生成口令。
  * ========================================================================= */
 window.SEATS = [
   {
     "id": "01",
-    "pwd": "K3DJ"
+    "pwds": [
+      "K3DJ",
+      "HAEC"
+    ]
   },
   {
     "id": "02",
-    "pwd": "PRDV"
+    "pwds": [
+      "PRDV",
+      "FXEE"
+    ]
   },
   {
     "id": "03",
-    "pwd": "JHTR"
+    "pwds": [
+      "JHTR",
+      "VLSV"
+    ]
   },
   {
     "id": "04",
-    "pwd": "8PEQ"
+    "pwds": [
+      "8PEQ",
+      "63KZ"
+    ]
   },
   {
     "id": "05",
-    "pwd": "HXXL"
+    "pwds": [
+      "HXXL",
+      "ZCUD"
+    ]
   },
   {
     "id": "06",
-    "pwd": "KMD4"
+    "pwds": [
+      "KMD4",
+      "22MS"
+    ]
   },
   {
     "id": "07",
-    "pwd": "ELN7"
+    "pwds": [
+      "ELN7",
+      "YELJ"
+    ]
   },
   {
     "id": "08",
-    "pwd": "CXBS"
+    "pwds": [
+      "CXBS",
+      "YC5W"
+    ]
   },
   {
     "id": "09",
-    "pwd": "BWGQ"
+    "pwds": [
+      "BWGQ",
+      "EZV2"
+    ]
   },
   {
     "id": "10",
-    "pwd": "BLS9"
+    "pwds": [
+      "BLS9",
+      "UT8G"
+    ]
   },
   {
     "id": "11",
-    "pwd": "WJTQ"
+    "pwds": [
+      "WJTQ",
+      "FJV8"
+    ]
   },
   {
     "id": "12",
-    "pwd": "75RW"
+    "pwds": [
+      "75RW",
+      "CSL7"
+    ]
   },
   {
     "id": "13",
-    "pwd": "NSNE"
+    "pwds": [
+      "NSNE",
+      "B6CD"
+    ]
   },
   {
     "id": "14",
-    "pwd": "Q4HC"
+    "pwds": [
+      "Q4HC",
+      "4B53"
+    ]
   },
   {
     "id": "15",
-    "pwd": "5GZZ"
+    "pwds": [
+      "5GZZ",
+      "LQNC"
+    ]
   },
   {
     "id": "16",
-    "pwd": "5FSC"
+    "pwds": [
+      "5FSC",
+      "6HTC"
+    ]
   },
   {
     "id": "17",
-    "pwd": "7C59"
+    "pwds": [
+      "7C59",
+      "JGHC"
+    ]
   },
   {
     "id": "18",
-    "pwd": "38HL"
+    "pwds": [
+      "38HL",
+      "KBDX"
+    ]
   },
   {
     "id": "19",
-    "pwd": "55JF"
+    "pwds": [
+      "55JF",
+      "246Z"
+    ]
   },
   {
     "id": "20",
-    "pwd": "G7R2"
+    "pwds": [
+      "G7R2",
+      "7THM"
+    ]
   },
   {
     "id": "21",
-    "pwd": "TYNJ"
+    "pwds": [
+      "TYNJ",
+      "65HX"
+    ]
   },
   {
     "id": "22",
-    "pwd": "CV5C"
+    "pwds": [
+      "CV5C",
+      "THJ3"
+    ]
   },
   {
     "id": "23",
-    "pwd": "NF9L"
+    "pwds": [
+      "NF9L",
+      "JC57"
+    ]
   },
   {
     "id": "24",
-    "pwd": "V84Y"
+    "pwds": [
+      "V84Y",
+      "GCDE"
+    ]
   },
   {
     "id": "25",
-    "pwd": "HLH6"
+    "pwds": [
+      "HLH6",
+      "RSQX"
+    ]
   },
   {
     "id": "26",
-    "pwd": "4BW7"
+    "pwds": [
+      "4BW7",
+      "M8H7"
+    ]
   },
   {
     "id": "27",
-    "pwd": "AKTR"
+    "pwds": [
+      "AKTR",
+      "6N6H"
+    ]
   },
   {
     "id": "28",
-    "pwd": "CNFT"
+    "pwds": [
+      "CNFT",
+      "HZYX"
+    ]
   },
   {
     "id": "29",
-    "pwd": "9KXW"
+    "pwds": [
+      "9KXW",
+      "VRR9"
+    ]
   },
   {
     "id": "30",
-    "pwd": "FZNG"
+    "pwds": [
+      "FZNG",
+      "9AF8"
+    ]
   },
   {
     "id": "31",
-    "pwd": "48KN"
+    "pwds": [
+      "48KN",
+      "5M54"
+    ]
   },
   {
     "id": "32",
-    "pwd": "Q5CM"
+    "pwds": [
+      "Q5CM",
+      "3Y3R"
+    ]
   },
   {
     "id": "33",
-    "pwd": "UZH7"
+    "pwds": [
+      "UZH7",
+      "XFCD"
+    ]
   },
   {
     "id": "34",
-    "pwd": "7LHH"
+    "pwds": [
+      "7LHH",
+      "UUXD"
+    ]
   },
   {
     "id": "35",
-    "pwd": "V4J5"
+    "pwds": [
+      "V4J5",
+      "XE7M"
+    ]
   },
   {
     "id": "36",
-    "pwd": "JY65"
+    "pwds": [
+      "JY65",
+      "8GZS"
+    ]
   },
   {
     "id": "37",
-    "pwd": "3YSL"
+    "pwds": [
+      "3YSL",
+      "FS65"
+    ]
   },
   {
     "id": "38",
-    "pwd": "F6UR"
+    "pwds": [
+      "F6UR",
+      "7BLQ"
+    ]
   },
   {
     "id": "39",
-    "pwd": "5R7N"
+    "pwds": [
+      "5R7N",
+      "BGFP"
+    ]
   },
   {
     "id": "40",
-    "pwd": "RJ95"
+    "pwds": [
+      "RJ95",
+      "9UQL"
+    ]
   },
   {
     "id": "41",
-    "pwd": "S5QQ"
+    "pwds": [
+      "S5QQ",
+      "VC9N"
+    ]
   },
   {
     "id": "42",
-    "pwd": "AANR"
+    "pwds": [
+      "AANR",
+      "HQF6"
+    ]
   },
   {
     "id": "43",
-    "pwd": "MTBU"
+    "pwds": [
+      "MTBU",
+      "XRBZ"
+    ]
   },
   {
     "id": "44",
-    "pwd": "ESC2"
+    "pwds": [
+      "ESC2",
+      "UVGP"
+    ]
   },
   {
     "id": "45",
-    "pwd": "FSWB"
+    "pwds": [
+      "FSWB",
+      "NLNS"
+    ]
   },
   {
     "id": "46",
-    "pwd": "9P5Z"
+    "pwds": [
+      "9P5Z",
+      "7E4U"
+    ]
   },
   {
     "id": "47",
-    "pwd": "V2YN"
+    "pwds": [
+      "V2YN",
+      "DWEP"
+    ]
   },
   {
     "id": "48",
-    "pwd": "LTPN"
+    "pwds": [
+      "LTPN",
+      "35QU"
+    ]
   },
   {
     "id": "49",
-    "pwd": "GQ7P"
+    "pwds": [
+      "GQ7P",
+      "PESB"
+    ]
   },
   {
     "id": "50",
-    "pwd": "FB7U"
+    "pwds": [
+      "FB7U",
+      "58RU"
+    ]
   },
   {
     "id": "51",
-    "pwd": "CC64"
+    "pwds": [
+      "CC64"
+    ]
   },
   {
     "id": "52",
-    "pwd": "WNC7"
+    "pwds": [
+      "WNC7"
+    ]
   },
   {
     "id": "53",
-    "pwd": "SSCP"
+    "pwds": [
+      "SSCP"
+    ]
   },
   {
     "id": "54",
-    "pwd": "R5JW"
+    "pwds": [
+      "R5JW"
+    ]
   },
   {
     "id": "55",
-    "pwd": "Z93W"
+    "pwds": [
+      "Z93W"
+    ]
   },
   {
     "id": "56",
-    "pwd": "FSJW"
+    "pwds": [
+      "FSJW"
+    ]
   },
   {
     "id": "57",
-    "pwd": "QMX8"
+    "pwds": [
+      "QMX8"
+    ]
   },
   {
     "id": "58",
-    "pwd": "4RNM"
+    "pwds": [
+      "4RNM"
+    ]
   },
   {
     "id": "59",
-    "pwd": "LHYP"
+    "pwds": [
+      "LHYP"
+    ]
   },
   {
     "id": "60",
-    "pwd": "QDW7"
+    "pwds": [
+      "QDW7"
+    ]
   },
   {
     "id": "61",
-    "pwd": "NWWP"
+    "pwds": [
+      "NWWP"
+    ]
   },
   {
     "id": "62",
-    "pwd": "8QQV"
+    "pwds": [
+      "8QQV"
+    ]
   },
   {
     "id": "63",
-    "pwd": "6NH5"
+    "pwds": [
+      "6NH5"
+    ]
   },
   {
     "id": "64",
-    "pwd": "DW9V"
+    "pwds": [
+      "DW9V"
+    ]
   },
   {
     "id": "65",
-    "pwd": "ALZE"
+    "pwds": [
+      "ALZE"
+    ]
   },
   {
     "id": "66",
-    "pwd": "TAZR"
+    "pwds": [
+      "TAZR"
+    ]
   },
   {
     "id": "67",
-    "pwd": "SBEZ"
+    "pwds": [
+      "SBEZ"
+    ]
   },
   {
     "id": "68",
-    "pwd": "X8ZV"
+    "pwds": [
+      "X8ZV"
+    ]
   },
   {
     "id": "69",
-    "pwd": "RH76"
+    "pwds": [
+      "RH76"
+    ]
   },
   {
     "id": "70",
-    "pwd": "4R9L"
+    "pwds": [
+      "4R9L"
+    ]
   },
   {
     "id": "71",
-    "pwd": "T5YA"
+    "pwds": [
+      "T5YA"
+    ]
   },
   {
     "id": "72",
-    "pwd": "UD9V"
+    "pwds": [
+      "UD9V"
+    ]
   },
   {
     "id": "73",
-    "pwd": "VVHB"
+    "pwds": [
+      "VVHB"
+    ]
   },
   {
     "id": "74",
-    "pwd": "ZBKB"
+    "pwds": [
+      "ZBKB"
+    ]
   },
   {
     "id": "75",
-    "pwd": "53KG"
+    "pwds": [
+      "53KG"
+    ]
   },
   {
     "id": "76",
-    "pwd": "M5V5"
+    "pwds": [
+      "M5V5"
+    ]
   },
   {
     "id": "77",
-    "pwd": "H33F"
+    "pwds": [
+      "H33F"
+    ]
   },
   {
     "id": "78",
-    "pwd": "U8D3"
+    "pwds": [
+      "U8D3"
+    ]
   },
   {
     "id": "79",
-    "pwd": "NRSH"
+    "pwds": [
+      "NRSH"
+    ]
   },
   {
     "id": "80",
-    "pwd": "XTC7"
+    "pwds": [
+      "XTC7"
+    ]
   },
   {
     "id": "81",
-    "pwd": "6QZ5"
+    "pwds": [
+      "6QZ5"
+    ]
   },
   {
     "id": "82",
-    "pwd": "C4AZ"
+    "pwds": [
+      "C4AZ"
+    ]
   },
   {
     "id": "83",
-    "pwd": "RTQK"
+    "pwds": [
+      "RTQK"
+    ]
   },
   {
     "id": "84",
-    "pwd": "UEZN"
+    "pwds": [
+      "UEZN"
+    ]
   },
   {
     "id": "85",
-    "pwd": "GWYY"
+    "pwds": [
+      "GWYY"
+    ]
   },
   {
     "id": "86",
-    "pwd": "CU52"
+    "pwds": [
+      "CU52"
+    ]
   },
   {
     "id": "87",
-    "pwd": "8EP8"
+    "pwds": [
+      "8EP8"
+    ]
   },
   {
     "id": "88",
-    "pwd": "J93S"
+    "pwds": [
+      "J93S"
+    ]
   },
   {
     "id": "89",
-    "pwd": "J3DU"
+    "pwds": [
+      "J3DU"
+    ]
   },
   {
     "id": "90",
-    "pwd": "458P"
+    "pwds": [
+      "458P"
+    ]
   },
   {
     "id": "91",
-    "pwd": "L6FN"
+    "pwds": [
+      "L6FN"
+    ]
   },
   {
     "id": "92",
-    "pwd": "NQW9"
+    "pwds": [
+      "NQW9"
+    ]
   },
   {
     "id": "93",
-    "pwd": "WK7E"
+    "pwds": [
+      "WK7E"
+    ]
   },
   {
     "id": "94",
-    "pwd": "RC3N"
+    "pwds": [
+      "RC3N"
+    ]
   },
   {
     "id": "95",
-    "pwd": "3Q7D"
+    "pwds": [
+      "3Q7D"
+    ]
   },
   {
     "id": "96",
-    "pwd": "7LQW"
+    "pwds": [
+      "7LQW"
+    ]
   },
   {
     "id": "97",
-    "pwd": "4M5W"
+    "pwds": [
+      "4M5W"
+    ]
   },
   {
     "id": "98",
-    "pwd": "NE4L"
+    "pwds": [
+      "NE4L"
+    ]
   },
   {
     "id": "99",
-    "pwd": "Y7BK"
+    "pwds": [
+      "Y7BK"
+    ]
   },
   {
     "id": "100",
-    "pwd": "329Z"
+    "pwds": [
+      "329Z"
+    ]
   }
 ];
 
@@ -416,6 +666,7 @@ window.SEAT_HELP = [
   '· 每人一个专属链接，数据按座位完全隔离（各自独立的 localStorage 命名空间，互不串档）。',
   '· 首次打开链接：输入本座位口令完成设备绑定 → 进入系统；之后本机免输口令。',
   '· 换设备打开：需再次输入口令；口令是真正的钥匙。',
+  '· 前 50 座支持新旧两套口令，任一口令均可进入（旧口令长期有效）。',
   '· 防共用为软性防护：清缓存 / 换浏览器 / 隐身模式可绕过，请告知学生勿转发链接与口令。',
   '· 真正 100% 一人一号需后端账号体系，当前静态方案无法做到。',
   '· 口令重置：如需收回或更换某座位口令，把新口令告诉老师，更新后重新部署（链接不变）。'
@@ -432,6 +683,7 @@ window.EL = window.EL || {};
   function isBound(){ try{ return localStorage.getItem(boundKey) === "1"; }catch(e){ return false; } }
   function bind(){ try{ localStorage.setItem(boundKey, "1"); }catch(e){} }
   window.EL.seat = seat ? {
-    id: seat.id, pwd: seat.pwd, ns: "seat" + seat.id + "_", bound: isBound(), isBound: isBound, bind: bind
-  } : { id: null, pwd: null, ns: "", bound: false, isBound: function(){ return false; }, bind: function(){} };
+    id: seat.id, pwd: (seat.pwds && seat.pwds[0]) || seat.pwd, pwds: seat.pwds || [seat.pwd],
+    ns: "seat" + seat.id + "_", bound: isBound(), isBound: isBound, bind: bind
+  } : { id: null, pwd: null, pwds: [], ns: "", bound: false, isBound: function(){ return false; }, bind: function(){} };
 })();
