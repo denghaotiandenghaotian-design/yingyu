@@ -106,21 +106,33 @@ body{
 .card h3{margin:0 0 12px; font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
 .card h4{margin:16px 0 8px; font-size:14px; font-weight:600;}
 
-/* ---- 页面顶部 · 资源赞助（低调折叠，默认收起） ---- */
+/* ---- 页面顶部 · 资源赞助（蓝色按钮 + 支付动图，点击展开） ---- */
 .sponsor{
   display:flex; flex-direction:column; align-items:center; text-align:center;
   margin:0 auto 20px; max-width:560px;
 }
 .sponsor-top{position:relative; z-index:2;}
 .sponsor-toggle{
-  display:inline-flex; align-items:center; gap:7px; cursor:pointer; font-family:inherit;
-  background:transparent; border:1px solid transparent; color:var(--muted); font-size:13px;
-  padding:8px 18px; border-radius:999px; transition:.18s;
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-family:inherit;
+  background:var(--brand); color:#fff; font-size:13.5px; font-weight:600;
+  padding:9px 22px; border-radius:999px; border:none;
+  box-shadow:0 4px 14px rgba(79,70,229,.28); transition:.18s;
 }
-.sponsor-toggle:hover{color:var(--ink-2); background:var(--bg); border-color:var(--line);}
-.sp-ico{font-size:14px;}
-.sp-arrow{font-size:11px; display:inline-block; transition:transform .25s ease; color:var(--muted);}
+[data-theme="dark"] .sponsor-toggle{box-shadow:0 4px 14px rgba(129,140,248,.3);}
+.sponsor-toggle:hover{background:var(--brand-700); transform:translateY(-1px); box-shadow:0 6px 18px rgba(79,70,229,.34);}
+.sponsor-toggle:active{transform:translateY(0);}
+.sp-txt{white-space:nowrap;}
+.sp-arrow{font-size:11px; display:inline-block; transition:transform .25s ease; color:rgba(255,255,255,.92);}
 .sponsor.open .sp-arrow{transform:rotate(180deg);}
+
+/* 小型支付动图：浮动金币（¥）+ 顶部闪烁星 */
+.sp-pay{width:19px; height:19px; flex-shrink:0; animation:payBob 2.4s ease-in-out infinite;}
+.pay-star{animation:payTwinkle 2s ease-in-out infinite; transform-box:fill-box;}
+.pay-coin{animation:payGlow 2.4s ease-in-out infinite; transform-box:fill-box;}
+@keyframes payBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-2.5px);}}
+@keyframes payTwinkle{0%,100%{opacity:1;}50%{opacity:.28;}}
+@keyframes payGlow{0%,100%{opacity:1;}50%{opacity:.8;}}
+
 .sponsor-body{
   width:100%; max-height:0; opacity:0; overflow:hidden; transform:translateY(-6px);
   transition:max-height .32s ease, opacity .32s ease, transform .32s ease;
