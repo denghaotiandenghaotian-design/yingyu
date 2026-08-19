@@ -97,7 +97,7 @@
     var topTitle = document.getElementById("topTitle");
     var topMeta = document.getElementById("topMeta");
     topTitle.textContent = "座位入口";
-    topMeta.textContent = "座位模式已开启 · 50 个座位";
+    topMeta.textContent = "座位模式已开启 · 100 个座位";
 
     var raw = "";
     try{ raw = (new URLSearchParams(location.search).get("seat") || "").trim().toUpperCase(); }catch(e){}
@@ -109,13 +109,13 @@
       + '<div class="gate-logo">🪑</div>'
       + '<div class="gate-head">' + (invalid ? "⚠️ 座位无效" : (id ? "座位 " + id : "座位入口")) + '</div>'
       + '<div class="gate-sub">' + (invalid
-          ? '链接中的座位号「' + esc(raw) + '」不存在，本系统仅有 01–50 号座位。'
+          ? '链接中的座位号「' + esc(raw) + '」不存在，本系统仅有 01–100 号座位。'
           : (id
               ? '首次打开本座位，输入口令完成设备绑定。<br>之后本机免输口令；口令是真正的钥匙，请勿转发。'
-              : '请使用老师发放的专属链接，<br>或手动输入座位号（01–50）与口令。'))
+              : '请使用老师发放的专属链接，<br>或手动输入座位号（01–100）与口令。'))
       + '</div>'
       + '<div class="gate-form">'
-      + (id ? '' : '<div class="gate-field"><label>座位号</label><input type="text" id="gateNo" placeholder="如 03" maxlength="2" autocomplete="off"></div>')
+      + (id ? '' : '<div class="gate-field"><label>座位号</label><input type="text" id="gateNo" placeholder="如 03 或 100" maxlength="3" autocomplete="off"></div>')
       + '<div class="gate-field"><label>座位口令</label><input type="password" id="gatePwd" placeholder="请输入本座位口令" autocomplete="off"></div>'
       + '<div class="gate-actions">'
       + '<button class="btn" id="gateEnter">🔓 进入系统</button>'
@@ -135,7 +135,7 @@
       var pwd = document.getElementById("gatePwd").value.trim().toUpperCase();
       var seatObj = null;
       (window.SEATS || []).forEach(function(s){ if(s.id === no) seatObj = s; });
-      if(!seatObj){ document.getElementById("gateErr").textContent = "座位号无效（应为 01–50）。"; return; }
+      if(!seatObj){ document.getElementById("gateErr").textContent = "座位号无效（应为 01–100）。"; return; }
       if(pwd !== seatObj.pwd){ document.getElementById("gateErr").textContent = "口令错误，请核对后重试。"; return; }
       // 绑定并进入（更新 EL.seat，后续 store 读写自动切换命名空间）
       window.EL.seat = { id: seatObj.id, pwd: seatObj.pwd, ns: "seat" + seatObj.id + "_", bound: true, isBound: function(){ return true; }, bind: function(){} };
